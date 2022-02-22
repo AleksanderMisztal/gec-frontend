@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-// const backend = 'https://gecbackend.herokuapp.com/';
-const backend = 'http://localhost:5000';
+const backend = 'https://gecbackend.herokuapp.com/';
+//const backend = 'http://localhost:5000';
 
 export default function Home() {
   const [prediction, setPrediction] = useState(undefined);
