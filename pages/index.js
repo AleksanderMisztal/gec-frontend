@@ -15,15 +15,20 @@ export default function Home() {
   const getPrediction = async (sentence) => {
     if (loading) return;
     console.log('getting prediction');
+    setPrediction(undefined);
     setLoading(true);
-    const res = await fetch(`${backend}/model?sentence=${sentence}`);
-    const data = await res.json();
-    setPrediction(data[0]);
+    try {
+      const res = await fetch(`${backend}/model?sentence=${sentence}`);
+      const data = await res.json();
+      setPrediction(data[0]);
+    } catch (e) {
+      setPrediction('Something went wrong. Please refresh and retry.');
+    }
     setLoading(false);
   };
 
   return (
-    <div className="container mt-3 mx-auto w-max max-w-full shadow-lg rounded-lg bg-blue-100 p-8">
+    <div className="sm:mt-3 sm:shadow-lg sm:rounded-lg mx-auto w-full max-w-md bg-blue-100 p-8">
       <h1 className="text-3xl text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-red-600">
         Grammatical error correction
       </h1>
@@ -38,10 +43,9 @@ export default function Home() {
           data-gramm="false"
           data-gramm_editor="false"
           data-enable-grammarly="false"
-          cols="50"
           rows="5"
           id="sentence"
-          className="block border-2 p-2 shadow-inner rounded-md border-gray-800"
+          className="block w-full border-2 active:border-black p-2 shadow-inner rounded-md border-gray-800"
         />
         <button
           type="submit"
@@ -49,18 +53,18 @@ export default function Home() {
         >
           Correct
         </button>
-        {loading && 'Loading...'}
+        {loading && 'Loading... This can take a while...'}
         {prediction !== undefined && (
           <div className="mt-3">
             Predicted correction
             <textarea
+              readOnly
               data-gramm="false"
               data-gramm_editor="false"
               data-enable-grammarly="false"
-              className="block border-2 p-2 shadow-inner rounded-md border-gray-800"
+              className="block w-full border-2 p-2 shadow-inner rounded-md border-gray-800"
               name="prediction"
               id="prediction"
-              cols="50"
               rows="5"
               value={prediction}
             ></textarea>
